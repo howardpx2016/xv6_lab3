@@ -62,11 +62,12 @@ exec(char *path, char **argv)
 
   // Allocate two pages at the next page boundary.
   // Make the first inaccessible.  Use the second as the user stack.
-  sz = PGROUNDUP(sz);
-  if((sz = allocuvm(pgdir, sz, sz + 2*PGSIZE)) == 0)
+  // Lab3: move stack up to STACKBASE (KERNBASE-1), allocate only 1 page 
+  //sz = PGROUNDUP(sz); not needed for lab3
+  if(allocuvm(pgdir, PGROUNDDOWN(STACKBASE), STACKBASE) == 0) //changed for lab3. original:if sz = allocuvm(pgdir, sz, sz + 2*PGSIZE)
     goto bad;
-  clearpteu(pgdir, (char*)(sz - 2*PGSIZE));
-  sp = sz;
+  //clearpteu(pgdir, (char*)(sz - 2*PGSIZE)); not needed for lab3
+  sp = STACKBASE;
 
   // Push argument strings, prepare rest of stack in ustack.
   for(argc = 0; argv[argc]; argc++) {
