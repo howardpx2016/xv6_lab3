@@ -136,8 +136,13 @@ userinit(void)
   p->tf->es = p->tf->ds;
   p->tf->ss = p->tf->ds;
   p->tf->eflags = FL_IF;
-  p->tf->esp = PGSIZE;
+  p->tf->esp = STACKBASE;
+  p->tf->ebp = STACKBASE;
   p->tf->eip = 0;  // beginning of initcode.S
+
+  if (allocuvm(p->pgdir, PGROUNDDOWN(STACKBASE), STACKBASE) == 0) {
+      panic("proc.c: page allocation failed");
+  }
 
   safestrcpy(p->name, "initcode", sizeof(p->name));
   p->cwd = namei("/");
