@@ -139,7 +139,7 @@ userinit(void)
   p->tf->esp = STACKBASE;
   p->tf->ebp = STACKBASE;
   p->tf->eip = 0;  // beginning of initcode.S
-
+  //lab3: allocate stack in the beginning
   if (allocuvm(p->pgdir, PGROUNDDOWN(STACKBASE), STACKBASE) == 0) {
       panic("proc.c: page allocation failed");
   }

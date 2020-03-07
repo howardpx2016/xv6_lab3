@@ -336,7 +336,7 @@ copyuvm(struct proc *currproc) //lab3, original: (pde_t *pgdir, uint sz)
       goto bad;
   }
   //2nd loop for lab3
-  for(i = 0; i < currproc->pages; i += PGSIZE){
+  for(i = 0; i < currproc->pages; i++){
     uint pg_addr = STACKBASE - ((PGSIZE-1) * (i + 1)); //get address of next (new) page for new pte
     if((pte = walkpgdir(currproc->pgdir, (void *) pg_addr, 0)) == 0)
       panic("copyuvm: pte should exist");
